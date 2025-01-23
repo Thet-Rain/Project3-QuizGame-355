@@ -1,44 +1,114 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QuizApp</title>
-  <!--- Font awesome icons cd -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" 
-  integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" 
-  crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <!--- Custom CSS-->
-  <link rel = "stylesheet" href="stylesheets/style.css";>
+  <title>Blog Dashboard</title>
+  <style>
+    body {
+        background-color: #333;
+        font-family: Arial, sans-serif;
+        color: white;
+        margin: 0;
+        padding: 0;
+    }
+    header {
+      background-color: #4CAF50;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+    nav {
+      background-color: #333;
+      color: white;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 8px 15px;
+    }
+    nav a:hover {
+      background-color: #575757;
+      border-radius: 4px;
+    }
+    main {
+      display: flex;
+      padding: 20px;
+      gap: 20px;
+    }
+    .sidebar {
+      width: 25%;
+      background-color: #0c0c0c;
+      color: white;
+      padding: 15px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+    .content {
+      width: 75%;
+    }
+    .post {
+        background-color: #0c0c0c;
+        color: white;
+      margin-bottom: 20px;
+      padding: 15px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+    footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 10px 0;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+  </style>
 </head>
 <body>
+  <header>
+    <h1>Blog Dashboard</h1>
+  </header>
   
-  <div class = "wrapper">
-    <div class = "quiz-container">
-      <div class = "quiz-head">
-        <h1 class = "quiz-title">Quiz Game</h1>
-        <div class= "quiz-score flex">
-          <span id = "correct-score">0</span>/<span id = "total-question">10</span>
-        </div>
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">Create Post</a>
+    <a href="#">Manage Posts</a>
+    <a href="#">Profile</a>
+    <a href="/logout">Logout</a>
+  </nav>
+  
+  <main>
+    <div class="sidebar">
+      <h3 style="color:green">Welcome <%= user_name%></h3>
+    <div>
+       <h5 class="mt-0 mb-0"><%user%></h5>
+    </div>
+    </div>
+    <div class="content">
+      <div class="post">
+        <h2>Post Title 1</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur auctor massa at urna tincidunt.</p>
+        <a href="#">Read more...</a>
       </div>
-
-      <div class="quiz-body">
-        <h2 class="quiz-question" id = "question">What is the full form of HTTP?</h2>
-        <ul class = "quiz-options">
-          <li>1. Hyper text transfer package</li>
-          <li>1. Hyper text transfer package</li>
-          <li>1. Hyper text transfer package</li>
-          <li>1. Hyper text transfer package</li>
-        </ul>
-        <div id = "result">
-            <!--- result here-->
-        </div>
-
-        <div class = "quiz-foot">
-          <button type = "button" id = "check-answer">Check Answer</button>
-          <button type = "button" id = "play-again">PlayAgain!</button>
-        </div>
+      <div class="post">
+        <h2>Post Title 2</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur auctor massa at urna tincidunt.</p>
+        <a href="#">Read more...</a>
+      </div>
+      <div class="post">
+        <h2>Post Title 3</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur auctor massa at urna tincidunt.</p>
+        <a href="#">Read more...</a>
       </div>
     </div>
-  </div>
+  </main>
+
+  
+  <footer>
+    <p>© 2025 Blog Dashboard. All rights reserved.</p>
+  </footer>
 </body>
 </html>

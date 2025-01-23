@@ -6,7 +6,7 @@ const session = require('express-session');
 var logger = require('morgan');
 require("dotenv").config();
 const { connectToDB } = require('./models/db');
-const port = 3000;
+const port = 5000;
 
 
 var indexRouter = require('./routes/index');
@@ -17,7 +17,7 @@ var app = express();
 //Session 
 // Configure session middleware
 app.use(session({
-  secret: 'your-secret-key',
+  secret: 'GodHatesMe1234',
   resave: false,
   saveUninitialized: true
 }));
@@ -61,7 +61,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-app.listen(3000,()=>{
+app.listen(port,()=>{
   console.log(`Port connected at ${port}`)
 });
 module.exports = app;

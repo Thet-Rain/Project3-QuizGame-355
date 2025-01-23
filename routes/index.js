@@ -4,7 +4,6 @@ const { getCollection } = require('../models/db');
 
 //Protected Route
 router.get('/', checkLoggedIn , function(req, res, next) {
-  console.log(req.session);
   // Access session data
   res.locals.user_name = req.session.user;
   res.render("dashboard", {user_name: res.locals.user_name} );

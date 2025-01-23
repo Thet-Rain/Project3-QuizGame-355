@@ -4,8 +4,11 @@ const { getCollection } = require('../models/db');
 
 //Protected Route
 router.get('/', checkLoggedIn , function(req, res, next) {
+  console.log(req.session);
+  // Access session data
+  res.locals.user_name = req.session.user;
+  res.render("dashboard", {user_name: res.locals.user_name} );
   
-  res.render("dashboard");
 });
 
 router.get('/signin', function(req, res, next) {
@@ -34,7 +37,6 @@ router.post("/signup/submit", async (req, res) => {
   const usersCollection = getCollection('users');
   try {
     await usersCollection.insertOne(req.body);
-    res.status(201).json({ message: 'Signup successful!' });
     res.redirect('/signin'); 
   } catch(e) {
     res.status(500).send("Failed to save to db.")
@@ -52,6 +54,7 @@ router.post("/signin/submit", async (req, res) => {
       const result = req.body.password === user.password;
       if (result) {
         req.session.loggedIn = true;
+        req.session.user = user.name;
         res.redirect("/");
       } else {
         res.status(400).json({ error: "password doesn't match" });

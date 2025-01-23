@@ -22,6 +22,11 @@ app.use(session({
   saveUninitialized: true
 }));
 
+app.use(function (req, res, next) {
+  res.locals.user = req.session.user;
+  next();
+});
+
 //Database connection!!
 (async () => {
   try {
@@ -49,6 +54,8 @@ app.use('/users', usersRouter);
 app.use(function(req, res, next) {
   next(createError(404));
 });
+
+
 
 // error handler
 app.use(function(err, req, res, next) {

@@ -1,22 +1,12 @@
 var express = require('express');
 var router = express.Router();
-var DOMParser = require('xmldom').DOMParser;
+
 
 //Protected Routes
 router.get('/', checkLoggedIn , function(req, res, next) {
   // Access session data
   res.locals.user_name = req.session.user;
   res.render("dashboard", {user_name: res.locals.user_name} );
-  
-});
-
-router.get('/quiz', checkLoggedIn , async function(req, res, next) {
-  
-  // Access session data
-  res.locals.user_name = req.session.user;
-
-
-    res.render("quiz", {  user_name: res.locals.user_name });
   
 });
 
@@ -44,11 +34,6 @@ router.get('/logout', (req, res) => {
   });
 });
 
-//middleware
-const htmlDecode = (input) => {
-  return input.replace(/&#(\d+);/g, (match, num) => {
-      return String.fromCharCode(num);
-  });
-};
+
 
 module.exports = router;

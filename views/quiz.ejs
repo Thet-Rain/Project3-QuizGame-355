@@ -32,17 +32,17 @@
             <div class="question" id="question">Loading question...</div>
             <div class="choices" id="choices"></div>
             <div class="result" id="result" ></div>
-            <button class="next-button" id="next" onclick="loadNextQuestion()">Next Question</button>
+            <button class="next-button" id="next" onclick="nextQuestion()">Next Question</button>
             <div class="restart-box" id="restart"  onclick="location.reload()">Restart</div>
         </div>
         <div class="tracker-box" id="tracker-box" style="display: none;"></div>
     </div>
       
     </div>
-    
-
-    
 </body>
+
+                                <!-- JAVA SCRIPT AREA -->
+
 <script>
     let score = 0; // Initialize score
     const scoreBox = document.getElementById('score-box');
@@ -55,8 +55,10 @@
     let questionData;  
     let response;
     let data;
-        
+    let isAnswered = false;
+    let maxQuestions = 10;    
     let currentQuestionIndex = 0;
+    let questionCount = 0;
 
     async function loadQuestion() {
         resultElement.textContent = '';
@@ -69,7 +71,7 @@
             data = await response.json();
             console.log(data.results[currentQuestionIndex]);
             questionData = data.results[currentQuestionIndex];
-            questionElement.textContent = "[ Question " + currentQuestionIndex  +  " ] " +  questionData.question;
+            questionElement.textContent = `[ Question ${currentQuestionIndex+1}] ${questionData.question}`;
         
             createChoice(questionData);
         
@@ -77,10 +79,21 @@
         } catch (error) {
             questionElement.textContent = 'Error loading question. Please try again.';
             console.log(error);
+        }
     }
-}
+    function nextQuestion() {
+        if (currentQuestionIndex >= maxQuestions-1) {
+            endGame();
+            // Reset the score on the server
+                
+        } else {
+            questionCount++;
+            loadNextQuestion();
+        }
+    }
 
         function loadNextQuestion() {
+            isAnswered = false;
             resultElement.textContent = '';
             nextButton.style.display = 'none';
             choicesElement.innerHTML = '';
@@ -108,6 +121,14 @@
         };
 
         function checkAnswer(element, correctAnswer) {
+            
+            if (isAnswered) return; // Prevent multiple answers
+            isAnswered = true; // Mark the question as answered
+
+            // Disable all buttons
+            const allButtons = document.querySelectorAll('.choice');
+            allButtons.forEach((btn) => btn.classList.add('disabled'));
+
             if (element === correctAnswer) {
                 score += 1;
                 resultElement.textContent = 'Correct! ';

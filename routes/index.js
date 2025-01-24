@@ -1,23 +1,34 @@
 var express = require('express');
 var router = express.Router();
-const { getCollection } = require('../models/db');
+var DOMParser = require('xmldom').DOMParser;
 
-//Protected Route
+//Protected Routes
 router.get('/', checkLoggedIn , function(req, res, next) {
-  console.log(req.session);
   // Access session data
   res.locals.user_name = req.session.user;
   res.render("dashboard", {user_name: res.locals.user_name} );
   
 });
 
-router.get('/signin', function(req, res, next) {
-  res.render("signin");
+router.get('/quiz', checkLoggedIn , async function(req, res, next) {
+  
+  // Access session data
+  res.locals.user_name = req.session.user;
+
+
+    res.render("quiz", {  user_name: res.locals.user_name });
+  
 });
 
-router.get('/signup', function(req, res, next) {
-  res.render("signup");
-});
+
+
+//check user session if loged in or not
+function checkLoggedIn(req, res, next) {
+  if (req.session.loggedIn)
+    next();
+  else
+    res.redirect('/signin')
+}
 
 // Logout route
 router.get('/logout', (req, res) => {
@@ -33,46 +44,11 @@ router.get('/logout', (req, res) => {
   });
 });
 
-router.post("/signup/submit", async (req, res) => {
-  const usersCollection = getCollection('users');
-  try {
-    await usersCollection.insertOne(req.body);
-    res.redirect('/signin'); 
-  } catch(e) {
-    res.status(500).send("Failed to save to db.")
-  }
-  
-});
-
-router.post("/signin/submit", async (req, res) => {
-  const usersCollection = getCollection('users');
-  try {
-    // check if the user exists
-    const user = await usersCollection.findOne({ email: req.body.email });
-    if (user) {
-      //check if password matches
-      const result = req.body.password === user.password;
-      if (result) {
-        req.session.loggedIn = true;
-        req.session.user = user.name;
-        res.redirect("/");
-      } else {
-        res.status(400).json({ error: "password doesn't match" });
-      }
-    } else {
-      res.status(400).json({ error: "User doesn't exist" });
-    }
-  } catch (error) {
-    res.status(400).json({ error });
-  }
-  
-});
-
-function checkLoggedIn(req, res, next) {
-  if (req.session.loggedIn)
-    next();
-  else
-    res.redirect('/signin')
-}
+//middleware
+const htmlDecode = (input) => {
+  return input.replace(/&#(\d+);/g, (match, num) => {
+      return String.fromCharCode(num);
+  });
+};
 
 module.exports = router;

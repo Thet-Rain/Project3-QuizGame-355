@@ -8,9 +8,10 @@ require("dotenv").config();
 const { connectToDB } = require('./models/db');
 const port = 5000;
 
-
+//routers
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var signinRouter = require('./routes/signin');
+var signupRouter = require('./routes/signup');
 
 var app = express();
 
@@ -27,16 +28,6 @@ app.use(function (req, res, next) {
   next();
 });
 
-//Database connection!!
-(async () => {
-  try {
-    await connectToDB();
-    console.log('Database initialized');
-  } catch (error) {
-    console.error('Failed to start database:', error);
-  }
-})();
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -47,15 +38,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+//Routers
+app.use(signinRouter);
+app.use(signupRouter);
+app.use(indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
-
-
 
 // error handler
 app.use(function(err, req, res, next) {
@@ -68,7 +59,19 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+//Database connection!!
+(async () => {
+  try {
+    await connectToDB();
+    console.log('Database initialized');
+  } catch (error) {
+    console.error('Failed to start database:', error);
+  }
+})();
+
+//Server Starts
 app.listen(port,()=>{
   console.log(`Port connected at ${port}`)
 });
+
 module.exports = app;

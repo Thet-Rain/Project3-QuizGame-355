@@ -6,9 +6,14 @@
     <title>Multiple Choice Game</title>
     <link rel="stylesheet" href="stylesheets/dashboard.css">
     <link rel="stylesheet" href="stylesheets/animationBackground.css">
+    <link rel="stylesheet" href="stylesheets/user-container.css">
 </head>
 <body>
     <!-- for animation -->
+    <div class="user-info">
+      <h4>Welcome, <%= user_name %>!</h4>
+      <button onclick="logout()">Logout</button>
+  </div>
     <div class="animation-container">
         
         <!--animation bubbles-->
@@ -29,7 +34,7 @@
             <button class="next-button" id="next" onclick="nextQuestion()">Next Question</button>
             <div class="restart-box" id="restart"  onclick="location.reload()">Restart</div>
         </div>
-        <button class="start-button" id="start-button" onclick="putBalls()">>Start Quiz</button>
+        <button class="start-button" id="start-button" onclick="location.href='/quiz'">>Start Quiz</button>
         <div class="tracker-box" id="tracker-box" style="display: none;"></div>
     </div>
       

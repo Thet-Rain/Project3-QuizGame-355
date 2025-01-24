@@ -65,8 +65,6 @@ const ballString = '<span style="--i:11;"></span>'+
 function putBalls(){
     const ballsClass = document.getElementsByClassName("bubbles");
     ballsClass[0].innerHTML = ballString;
-    console.log(ballsClass.innerHTML);
-    console.log(ballString);
 }
 
 putBalls();

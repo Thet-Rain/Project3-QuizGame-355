@@ -19,6 +19,7 @@ Then you run "node server.js" from the root folder.
   -Added User login logout Feature
   -Added DataBase for Users , and User play History with SCORE and TIME STAMP.
   -Added UserProfile wehre Users can see their play history. 
+  -Quiz Questions are being Loaded From TRIVIA API instead of hard coded Json File (TOOK ME a good 3 hours to get this work.... :())
 
   
 

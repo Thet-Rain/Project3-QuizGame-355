@@ -12,4 +12,7 @@ const userSchema = new mongoose.Schema({
     ],
 });
 
+// Add a unique index to enforce email uniqueness at the database level
+userSchema.index({ email: 1 }, { unique: true });
+
 module.exports = mongoose.model("User", userSchema);

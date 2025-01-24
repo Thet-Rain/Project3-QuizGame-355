@@ -5,7 +5,10 @@ var cookieParser = require('cookie-parser');
 const session = require('express-session');
 var logger = require('morgan');
 require("dotenv").config();
+const bcrypt = require("bcryptjs");
+const mongoose = require("mongoose");
 const { connectToDB } = require('./models/db');
+const User  = require('./models/User');
 const port = 5000;
 
 //routers

@@ -91,9 +91,10 @@ async function loadQuestion() {
                 resultElement.style.color = 'red';
             }
             nextButton.style.display = 'block';
-
             scoreBox.textContent = `Score: ${score}`;
             nextButton.style.display = 'block';
+            document.getElementsByClassName("choice").disable;
+           
         }
 
         // Load the first question

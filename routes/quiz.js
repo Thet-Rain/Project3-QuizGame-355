@@ -2,11 +2,15 @@ var express = require('express');
 var router = express.Router();
 const fs = require("fs");
 const path = require("path");
+const  User  = require('../models/User');
+const mongoose = require("mongoose");
+const session = require('express-session');
 
 router.get('/quiz', checkLoggedIn , async function(req, res, next) {
   
     // Access session data
     res.locals.user_name = req.session.user;
+    res.locals.user_email = req.session.email;
     res.render("quiz");
     
   });
@@ -41,7 +45,6 @@ const leaderboard = [];
 router.post("/updateScore", (req, res) => {
     
     const isCorrect  = req.body.booleanVar; // Expecting JSON payload
-    console.log(req.body.booleanVar);
   
     if (isCorrect) {
       score += 1; // Increment score if the answer is correct
@@ -69,7 +72,7 @@ router.post("/updateScore", (req, res) => {
   });
     
   // Route to add a new entry to the leaderboard
-  router.post("/leaderboard", (req, res) => {
+  router.post("/leaderboard", async (req, res) => {
   const { name } = req.body;
     
   if (!name || typeof name !== "string") {
@@ -82,9 +85,16 @@ router.post("/updateScore", (req, res) => {
   leaderboard.splice(10); // Keep only the top 10
     
   saveLeaderboard(leaderboard);
+
+  //Also include adding user score to user profile database
+  // Save the score to the user's profile
+  const user = await User.findOne({email : req.session.email});
+  user.scores.push({ score });
+  await user.save();
     
   res.json({ message: "Leaderboard updated.", leaderboard });
   });
+
   
 
   module.exports = router;

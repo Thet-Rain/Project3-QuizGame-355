@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="stylesheets/dashboard.css">
+    <link rel="stylesheet" href="stylesheets/animationBackground.css">
+    <link rel="stylesheet" href="stylesheets/user-container.css">
+</head>
+<body>
+    <!-- for animation -->
+    <div class="user-info">
+        <h4>Welcome, <%= user_name %>!</h4>
+        <button onclick="location.href='/logout';">Logout</button>
+        <button onclick="location.href='/profile';">Profile</button>
+    </div>
+    <div class="animation-container">
+
+        <div class = "bubbles">
+            <!-- BALLS ARE BEING INSERTED VIA BALLS.js HERE -->
+        </div>  
+        <div class="game-container">
+            <h1>Welcome, <%= user.name %>!</h1>
+            <p>Email: <%= user.email %></p>
+    
+            <h2>Your Play History</h2>
+            <% if (user.scores.length > 0) { %>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Score</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% user.scores.reverse().forEach((entry) => { %>
+                            <tr>
+                                <td><%= entry.score %>/10</td>
+                                <td><%= new Date(entry.date).toLocaleString() %></td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <p>You haven't played any quizzes yet.</p>
+            <% } %>
+    
+            <button style=" background-color: #5a67d8; color: white;" onclick="location.href='/';">Back To Quiz DashBoard</button>
+        </div>      
+    </div>
+
+    <!-- ballsjs -->
+    <script  src="javascripts/balls.js"></script>
+</body>
+</html>

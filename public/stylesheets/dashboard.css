@@ -184,3 +184,17 @@ body {
 .submit-container button:hover {
     background-color: #45a049;
 }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    text-align: center;
+    align-items: center;
+}
+
+table th, table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+}

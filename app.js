@@ -17,6 +17,7 @@ var indexRouter = require('./routes/index');
 var signinRouter = require('./routes/signin');
 var signupRouter = require('./routes/signup');
 var quizRouter = require('./routes/quiz');
+var profileRouter = require('./routes/profile');
 
 var app = express();
 
@@ -48,6 +49,7 @@ app.use(signinRouter);
 app.use(signupRouter);
 app.use(indexRouter);
 app.use(quizRouter);
+app.use(profileRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -65,21 +67,8 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-//Database connection!!
-// (async () => {
-//   try {
-//     await connectToDB();
-//     console.log('Database initialized');
-//   } catch (error) {
-//     console.error('Failed to start database:', error);
-//   }
-// })();
-
 // MongoDB Connection
-mongoose.connect(dbURL, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    })
+mongoose.connect(dbURL)
     .then(() => console.log("Connected to MongoDB"))
     .catch((err) => console.error("MongoDB connection error:", err));
 

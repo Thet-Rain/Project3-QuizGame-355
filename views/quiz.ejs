@@ -13,6 +13,7 @@
     <div class="user-info">
       <h4>Welcome, <%= user_name %>!</h4>
       <button onclick="location.href='/logout';">Logout</button>
+      <button onclick="location.href='/profile';">Profile</button>
   </div>
     <div class="animation-container">
         
@@ -179,16 +180,14 @@
 
                 const nameInput = document.createElement('input');
                 nameInput.type = 'button';
-                // nameInput.placeholder = 'Enter your name';
-                // nameInput.id = 'name-input';
 
                 const submitButton = document.createElement('button');
                 submitButton.type = 'button';
                 submitButton.textContent = 'Submit Score';
                 submitButton.onclick = function () {
-                     submitScore('<%= user_name %>');
-                     trackerBox.style.display = 'none';
-                     submitContainer.style.display = 'none';
+                    submitScore('<%= user_name %>');
+                    trackerBox.style.display = 'none';
+                    submitContainer.style.display = 'none';
                 
                 }
 
@@ -212,7 +211,6 @@
                 });
 
                 const result = await response.json();
-                alert(result.message);
 
                 // Refresh leaderboard
                 fetchLeaderboard();

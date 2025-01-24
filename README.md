@@ -17,6 +17,9 @@ Then you run "node server.js" from the root folder.
   --//Feature Added For PROJECT 3
   -Migrated From using HTML files in public to using EJS to load html using express.
   -Added User login logout Feature
+  -Added DataBase for Users , and User play History with SCORE and TIME STAMP.
+  -Added UserProfile wehre Users can see their play history. 
+  
   
 
 //Participant Name

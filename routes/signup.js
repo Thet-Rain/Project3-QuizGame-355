@@ -21,7 +21,7 @@ router.get('/signup', function(req, res, next) {
       password: hashedPassword,
   });
     try {
-      await usersCollection.insertOne(req.body);
+      await usersCollection.insertOne(user);
       res.redirect('/signin'); 
     } catch(e) {
       res.status(500).send("Failed to save to db.")

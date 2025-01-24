@@ -7,8 +7,9 @@ var logger = require('morgan');
 require("dotenv").config();
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
-const { connectToDB } = require('./models/db');
-const User  = require('./models/User');
+// const { connectToDB } = require('./models/db');
+// const User  = require('./models/User');
+const dbURL = process.env.ATLAS_URI;
 const port = 5000;
 
 //routers
@@ -65,14 +66,22 @@ app.use(function(err, req, res, next) {
 });
 
 //Database connection!!
-(async () => {
-  try {
-    await connectToDB();
-    console.log('Database initialized');
-  } catch (error) {
-    console.error('Failed to start database:', error);
-  }
-})();
+// (async () => {
+//   try {
+//     await connectToDB();
+//     console.log('Database initialized');
+//   } catch (error) {
+//     console.error('Failed to start database:', error);
+//   }
+// })();
+
+// MongoDB Connection
+mongoose.connect(dbURL, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    })
+    .then(() => console.log("Connected to MongoDB"))
+    .catch((err) => console.error("MongoDB connection error:", err));
 
 //Server Starts
 app.listen(port,()=>{

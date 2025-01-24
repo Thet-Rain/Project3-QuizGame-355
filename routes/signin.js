@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { getCollection } = require('../models/db');
+const  User  = require('../models/User');
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
 
@@ -11,12 +11,12 @@ router.get('/signin', function(req, res, next) {
 ;
 
 router.post("/signin/submit", async (req, res) => {
-  const usersCollection = getCollection('users');
   try {
     const { email, password } = req.body;
     // check if the user exists
-    const user = await usersCollection.findOne({ email });
-    // console.log(user);
+    const user = await User.findOne({ email });
+
+    //compare passwrod
     if (user && (await bcrypt.compare(password, user.password))) {
       req.session.loggedIn = true;
       req.session.user = user.name;

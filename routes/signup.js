@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-const { getCollection } = require('../models/db');
 const  User  = require('../models/User');
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
@@ -10,8 +9,6 @@ router.get('/signup', function(req, res, next) {
   });
 
   router.post("/signup/submit", async (req, res) => {
-    const usersCollection = getCollection('users');
-
     const { name, email, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 12);
 
@@ -20,13 +17,19 @@ router.get('/signup', function(req, res, next) {
       email,
       password: hashedPassword,
   });
+
     try {
-      await usersCollection.insertOne(user);
+      //saving user info to data base
+      await user.save();
       res.redirect('/signin'); 
-    } catch(e) {
-      res.status(500).send("Failed to save to db.")
-    }
-    
+    } catch(err) {
+      if (err.code === 11000) {
+        // 11000 is the MongoDB duplicate key error code
+        res.send("Email already exists. Please try a different one.");
+      }else{
+        res.status(500).send("Failed to save to db.")
+      }
+    }    
   });
 
   module.exports = router;

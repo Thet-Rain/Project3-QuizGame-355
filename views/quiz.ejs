@@ -32,7 +32,7 @@
             <div class="question" id="question">Loading question...</div>
             <div class="choices" id="choices"></div>
             <div class="result" id="result" ></div>
-            <button class="next-button" id="next" onclick="nextQuestion()">Next Question</button>
+            <button class="next-button" id="next" onclick="loadNextQuestion()">Next Question</button>
             <div class="restart-box" id="restart"  onclick="location.reload()">Restart</div>
         </div>
         <div class="tracker-box" id="tracker-box" style="display: none;"></div>
@@ -45,38 +45,38 @@
 </body>
 <script>
     let score = 0; // Initialize score
-const scoreBox = document.getElementById('score-box');
-const questionElement = document.getElementById('question');
-const choicesElement = document.getElementById('choices');
-const resultElement = document.getElementById('result');
-const nextButton = document.getElementById('next');
-let scoreCounter = 0;
-let choosen = false;
-let questionData;  
-let response;
+    const scoreBox = document.getElementById('score-box');
+    const questionElement = document.getElementById('question');
+    const choicesElement = document.getElementById('choices');
+    const resultElement = document.getElementById('result');
+    const nextButton = document.getElementById('next');
+    let scoreCounter = 0;
+    let choosen = false;
+    let questionData;  
+    let response;
+    let data;
         
-let currentQuestionIndex = 0;
+    let currentQuestionIndex = 0;
 
-async function loadQuestion() {
-    resultElement.textContent = '';
-    nextButton.style.display = 'none';
-    choicesElement.innerHTML = '';
+    async function loadQuestion() {
+        resultElement.textContent = '';
+        nextButton.style.display = 'none';
+        choicesElement.innerHTML = '';
             
+        try {
+            const apiUrl = `https://opentdb.com/api.php?amount=10&category=18&difficulty=hard&type=multiple`;
+            const response = await fetch(apiUrl);
+            data = await response.json();
+            console.log(data.results[currentQuestionIndex]);
+            questionData = data.results[currentQuestionIndex];
+            questionElement.textContent = "[ Question " + currentQuestionIndex  +  " ] " +  questionData.question;
         
-    try {
-        const apiUrl = `https://opentdb.com/api.php?amount=10&category=18&difficulty=hard&type=multiple`;
-        const response = await fetch(apiUrl);
-        const data = await response.json();
-        console.log(data.results[currentQuestionIndex]);
-        questionData = data.results[currentQuestionIndex];
-        questionElement.textContent = "[ Question " + currentQuestionIndex  +  " ] " +  questionData.question;
+            createChoice(questionData);
         
-        createChoice(questionData);
-        
-        currentQuestionIndex++;
-    } catch (error) {
-        questionElement.textContent = 'Error loading question. Please try again.';
-        console.log(error);
+            currentQuestionIndex++;
+        } catch (error) {
+            questionElement.textContent = 'Error loading question. Please try again.';
+            console.log(error);
     }
 }
 
@@ -84,10 +84,10 @@ async function loadQuestion() {
             resultElement.textContent = '';
             nextButton.style.display = 'none';
             choicesElement.innerHTML = '';
-            questionElement.textContent = "[ Question " + currentQuestionIndex +  " ] " + questionData[currentQuestionIndex].question;
-            
-                createChoice(questionData[currentQuestionIndex]);
-                currentQuestionIndex++;    
+            questionData = data.results[currentQuestionIndex];
+            questionElement.textContent = "[ Question " + currentQuestionIndex  +  " ] " +  questionData.question;
+            createChoice(questionData);
+            currentQuestionIndex++;    
         }
 
         function createChoice( questionData){
@@ -101,44 +101,14 @@ async function loadQuestion() {
                 const button = document.createElement('button');
                 button.className = 'choice';
                 button.textContent = element;
-                // button.onclick = () => checkAnswer('A', questionData.answer);
+                button.onclick = () => checkAnswer(element, correctAnswer);
                 choicesElement.appendChild(button);
             });
-            // for (var i = 0 ; i < 4; i++)
-            // {
-            //     switch(i) {
-            //     case 0:
-                    
-            //         button.className = 'choice';
-            //         button.textContent = optionsList[0];
-            //         // button.onclick = () => checkAnswer('A', questionData.answer);
-            //         choicesElement.appendChild(button);
-            //       break;
-            //     case 1:
-            //         button.className = 'choice';
-            //         button.textContent = optionsList[1];
-            //         // button.onclick = () => checkAnswer('B', questionData.answer);
-            //         choicesElement.appendChild(button);
-            //       break;
-            //     case 2:;
-            //         button.className = 'choice';
-            //         button.textContent = optionsList[2];
-            //         // button.onclick = () => checkAnswer('C', questionData.answer);
-            //         choicesElement.appendChild(button);
-            //       break;
-            //     case 3:
-            //         button.className = 'choice';
-            //         button.textContent = optionsList[3];
-            //         // button.onclick = () => checkAnswer('D', questionData.answer);
-            //         choicesElement.appendChild(button);
-            //       break;
-            //   };
-            // };
             
         };
 
-        function checkAnswer(selectedIndex, correctIndex) {
-            if (selectedIndex === correctIndex) {
+        function checkAnswer(element, correctAnswer) {
+            if (element === correctAnswer) {
                 score += 1;
                 resultElement.textContent = 'Correct! ';
                 resultElement.style.color = 'green';

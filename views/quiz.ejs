@@ -35,7 +35,7 @@
             <button class="next-button" id="next" onclick="nextQuestion()">Next Question</button>
             <div class="restart-box" id="restart"  onclick="location.reload()">Restart</div>
         </div>
-        <div class="tracker-box" id="tracker-box" style="display: none;"></div>
+        <div class="tracker-box" id="tracker-box" ></div>
     </div>
       
     </div>
@@ -50,6 +50,7 @@
     const choicesElement = document.getElementById('choices');
     const resultElement = document.getElementById('result');
     const nextButton = document.getElementById('next');
+    const trackerBox = document.getElementById('tracker-box');
     let scoreCounter = 0;
     let choosen = false;
     let questionData;  
@@ -59,20 +60,22 @@
     let maxQuestions = 10;    
     let currentQuestionIndex = 0;
     let questionCount = 0;
+    let current_user_name  = '<%= user_name %>';
 
     async function loadQuestion() {
         resultElement.textContent = '';
         nextButton.style.display = 'none';
         choicesElement.innerHTML = '';
+        resetScore();
             
         try {
             const apiUrl = `https://opentdb.com/api.php?amount=10&category=18&difficulty=hard&type=multiple`;
             const response = await fetch(apiUrl);
             data = await response.json();
-            console.log(data.results[currentQuestionIndex]);
+            // console.log(data.results[currentQuestionIndex]);
             questionData = data.results[currentQuestionIndex];
             questionElement.textContent = `[ Question ${currentQuestionIndex+1}] ${questionData.question}`;
-        
+            
             createChoice(questionData);
         
             currentQuestionIndex++;
@@ -82,7 +85,7 @@
         }
     }
     function nextQuestion() {
-        if (currentQuestionIndex >= maxQuestions-1) {
+        if (currentQuestionIndex >= maxQuestions) {
             endGame();
             // Reset the score on the server
                 
@@ -94,6 +97,7 @@
 
         function loadNextQuestion() {
             isAnswered = false;
+            // console.log(data.results[currentQuestionIndex]); 
             resultElement.textContent = '';
             nextButton.style.display = 'none';
             choicesElement.innerHTML = '';
@@ -108,7 +112,7 @@
             let incorrect_answers = questionData.incorrect_answers;
             let optionsList  = incorrect_answers;
             optionsList.splice(Math.floor(Math.random()*(incorrect_answers.length +1)), 0 , correctAnswer);
-            console.log(optionsList);
+            // console.log(optionsList);
             
             optionsList.forEach(element => {
                 const button = document.createElement('button');
@@ -120,7 +124,7 @@
             
         };
 
-        function checkAnswer(element, correctAnswer) {
+        async function checkAnswer(element, correctAnswer) {
             
             if (isAnswered) return; // Prevent multiple answers
             isAnswered = true; // Mark the question as answered
@@ -128,20 +132,135 @@
             // Disable all buttons
             const allButtons = document.querySelectorAll('.choice');
             allButtons.forEach((btn) => btn.classList.add('disabled'));
+            var isCorrect = element === correctAnswer;
 
-            if (element === correctAnswer) {
-                score += 1;
-                resultElement.textContent = 'Correct! ';
-                resultElement.style.color = 'green';
-            } else {
-                resultElement.textContent = 'Wrong! ❌';
+            // Update tracker with green or red circle
+            const circle = document.createElement('div');
+            circle.classList.add('circle', element === correctAnswer ? 'correct' : 'wrong');
+            trackerBox.appendChild(circle);
+            
+            //updateScore
+            try {
+                const response = await fetch('http://localhost:5000/updateScore', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body:  JSON.stringify({booleanVar :isCorrect }) ,
+                });
+            }catch (error) {
+                alert('Error Updating Score. Please try again.');
+            }
+            
+            //fetchScore
+            try{   
+                const response = await fetch('http://localhost:5000/score');
+                const result = await response.json();
+                console.log(result.score);
+                scoreBox.textContent = `Score: ${result.score}`;
+            }catch(error){
+                alert('Error Fetching Score. Please try again.');
+            }
+            
+            nextQuestion();
+            
+        }
+
+        function endGame() {
+            
+                // Display game over message
+                questionElement.textContent = "Game Over! Thank you for playing.";
+                choicesElement.innerHTML = '';
+                resultElement.textContent = `Your final score is ${scoreBox.textContent.split(': ')[1]}! 🎉`;
+                nextButton.style.display = 'none';
+                // scoreBox.style.display = 'none';
+
+                // Display name submission form
+                const submitContainer = document.createElement('div');
+                submitContainer.className = 'submit-container';
+
+                const nameInput = document.createElement('input');
+                nameInput.type = 'button';
+                // nameInput.placeholder = 'Enter your name';
+                // nameInput.id = 'name-input';
+
+                const submitButton = document.createElement('button');
+                submitButton.type = 'button';
+                submitButton.textContent = 'Submit Score';
+                submitButton.onclick = function () {
+                     submitScore('<%= user_name %>');
+                     trackerBox.style.display = 'none';
+                     submitContainer.style.display = 'none';
+                
+                }
+
+                submitContainer.appendChild(nameInput);
+                submitContainer.appendChild(submitButton);
+
+                resultElement.appendChild(submitContainer);
+
+                // Show leaderboard
+                fetchLeaderboard();
+                
+        }
+
+        async function submitScore(name) {
+
+            try {
+                const response = await fetch('http://localhost:5000/leaderboard', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name }),
+                });
+
+                const result = await response.json();
+                alert(result.message);
+
+                // Refresh leaderboard
+                fetchLeaderboard();
+                const submitContainer = document.getElementsByClassName('submit-container');
+                // submitContainer.style.display('none');
+            } catch (error) {
+                alert('Error submitting score. Please try again.');
+            }
+
+            
+
+
+        }
+
+        async function fetchLeaderboard() {
+            try {
+                const response = await fetch('http://localhost:5000/leaderboard');
+                const leaderboard = await response.json();
+
+                const leaderboardContainer = document.getElementById('leaderboard-container');
+                const leaderboardList = document.getElementById('leaderboard-list');
+                leaderboardList.innerHTML = '';
+
+                leaderboard.forEach((entry) => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${entry.name} - ${entry.score}`;
+                    leaderboardList.appendChild(listItem);
+                });
+
+                leaderboardContainer.style.display = 'block';
+            } catch (error) {
+                console.error('Error fetching leaderboard:', error);
+            }
+        }
+
+        async function resetScore() {
+            try {
+                // Reset the score on the server
+                await fetch('http://localhost:5000/reset', { method: 'POST' });
+
+            } catch (error) {
+                resultElement.textContent = 'Error resetting score. Please try again.';
                 resultElement.style.color = 'red';
             }
-            nextButton.style.display = 'block';
-
-            scoreBox.textContent = `Score: ${score}`;
-            nextButton.style.display = 'block';
         }
+
+        
+
 
         // Load the first question
         loadQuestion();

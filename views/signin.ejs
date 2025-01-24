@@ -4,22 +4,31 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="stylesheets/style.css">
-        <!-- <link rel="stylesheet" href="stylesheets/dashboard.css">
-        <link rel="stylesheet" href="stylesheets/animationBackground.css"> -->
+        <!-- <link rel="stylesheet" href="stylesheets/dashboard.css"> -->
+        <link rel="stylesheet" href="stylesheets/animationBackground.css">
     </head>
     <body>
-        <div class="container">
-            <form method="POST" action="/signin/submit" class="signup_form">
-                <div class="form_header">
-                    <h1>Sign in</h1>
-                    <p>Don't have an account? <a href="/signup">Sign up</a></p>
-                </div>
-                <label for="email">Email</label>
-                <input id="email" type="email" name="email">
-                <label for="password">Password</label>
-                <input id="password" type="password" name="password">
-                <input type="submit" value="Sign in">
-            </form>         
+        <div class="animation-container">
+
+            <div class = "bubbles">
+                <!-- BALLS ARE BEING INSERTED VIA BALLS.js HERE -->
+            </div>  
+            <div class = "container" >
+                <form method="POST" action="/signin/submit" class="signup_form">
+                    <div class="form_header">
+                        <h1>Sign in</h1>
+                        <p>Don't have an account? <a href="/signup">Sign up</a></p>
+                    </div>
+                    <label for="email">Email</label>
+                    <input id="email" type="email" name="email">
+                    <label for="password">Password</label>
+                    <input id="password" type="password" name="password">
+                    <input type="submit" value="Sign in">
+                </form>
+            </div>          
         </div>
+
+        <!-- ballsjs -->
+        <script  src="javascripts/balls.js"></script>
     </body>
 </html>

@@ -1,4 +1,4 @@
-body {
+/* body {
     display: flex;
     height: 100vh;
     margin: 0;  
@@ -6,16 +6,36 @@ body {
     align-items: center;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(-225deg, #AC32E4 0%, #7918F2 48%, #4801FF 100%);
+} */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #0c192c;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    z-index: 0;
 }
 
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* align-items: center;
     border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     width: 400px;
-    background-color: white;
+    background-color: rgb(12, 12, 12);
+    z-index: 4; */
+    z-index: 3;
+    background-color: #D3D3D3;
+    width: 400px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    position: absolute;
 }
 
 form {

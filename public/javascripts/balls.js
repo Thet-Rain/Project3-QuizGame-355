@@ -57,5 +57,16 @@ const ballString = '<span style="--i:11;"></span>'+
             '<span style="--i:28;"></span>'
 
 // Get a reference to the element where you want to insert the HTML
-const ballsClass = document.getElementsByClassName('bubbles');
-ballsClass.innerHTML = ballString;
+// const ballsClass = document.getElementsByClassName("bubbles");
+// ballsClass.innerHTML = ballString;
+// console.log(ballsClass.innerHTML);
+// console.log(ballString);
+
+function putBalls(){
+    const ballsClass = document.getElementsByClassName("bubbles");
+    ballsClass[0].innerHTML = ballString;
+    console.log(ballsClass.innerHTML);
+    console.log(ballString);
+}
+
+putBalls();

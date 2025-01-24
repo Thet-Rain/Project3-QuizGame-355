@@ -9,6 +9,7 @@ body {
 }
 
 .game-container {
+    z-index: 3;
     background-color: #D3D3D3;
     width: 400px;
     padding: 20px;

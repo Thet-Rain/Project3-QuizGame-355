@@ -142,7 +142,7 @@
             
             //updateScore
             try {
-                const response = await fetch('http://localhost:5000/updateScore', {
+                const response = await fetch('/updateScore', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body:  JSON.stringify({booleanVar :isCorrect }) ,
@@ -153,7 +153,7 @@
             
             //fetchScore
             try{   
-                const response = await fetch('http://localhost:5000/score');
+                const response = await fetch('/score');
                 const result = await response.json();
                 console.log(result.score);
                 scoreBox.textContent = `Score: ${result.score}`;
@@ -204,7 +204,7 @@
         async function submitScore(name) {
 
             try {
-                const response = await fetch('http://localhost:5000/leaderboard', {
+                const response = await fetch('/leaderboard', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ name }),
@@ -227,7 +227,7 @@
 
         async function fetchLeaderboard() {
             try {
-                const response = await fetch('http://localhost:5000/leaderboard');
+                const response = await fetch('/leaderboard');
                 const leaderboard = await response.json();
 
                 const leaderboardContainer = document.getElementById('leaderboard-container');
@@ -249,7 +249,7 @@
         async function resetScore() {
             try {
                 // Reset the score on the server
-                await fetch('http://localhost:5000/reset', { method: 'POST' });
+                await fetch('/reset', { method: 'POST' });
 
             } catch (error) {
                 resultElement.textContent = 'Error resetting score. Please try again.';
